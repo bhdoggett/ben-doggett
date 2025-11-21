@@ -1,12 +1,12 @@
 /* CSS Custom Properties */
 :root {
   --header-height: 15vh;
-  --nav-height: 85vh;
+  --nav-height: 100vh;
   --transition-speed: 100ms;
   --dev-color: #2c3e50;
   --dev-hover-color: #34495e;
-  --musician-color: #8e44ad;
-  --musician-hover-color: #9b59b6;
+  --music-color: #8e44ad;
+  --music-hover-color: #9b59b6;
   --text-color: #ffffff;
   --header-text-color: #2c3e50;
 }
@@ -19,8 +19,16 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, sans-serif;
+  font-family:
+    "Momo Trust Display",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    sans-serif;
   overflow: hidden;
   height: 100vh;
 }
@@ -31,8 +39,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
-  position: relative;
+  background-color: #ffffff00;
+  position: absolue;
   z-index: 10;
 }
 
@@ -86,8 +94,8 @@ header h1 {
   );
 }
 
-.nav-musician {
-  background-color: var(--musician-color);
+.nav-music {
+  background-color: var(--music-color);
 }
 
 /* Hover States */
@@ -95,8 +103,23 @@ header h1 {
   background-color: var(--dev-hover-color);
 }
 
-.nav-musician:hover {
-  background-color: var(--musician-hover-color);
+.nav-music:hover {
+  background-color: var(--music-hover-color);
+}
+
+/* Wrapper for Dev section with canvas */
+.wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  height: 100%;
+}
+
+.wrapper .nav-link {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 /* Responsive Typography */
