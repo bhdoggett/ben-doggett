@@ -61,6 +61,9 @@ benfaceContainer.addEventListener("mousedown", (e) => {
   devSpan.classList.add("drop-target");
   musicSpan.classList.add("drop-target");
 
+  // Shrink benface on mousedown
+  benfaceContainer.style.transform = "translate(-50%, -50%) scale(0.85)";
+
   // Prevent default behavior to avoid text selection
   e.preventDefault();
 });
@@ -76,7 +79,6 @@ document.addEventListener("mousemove", (e) => {
   // Use absolute positioning with left/top properties
   benfaceContainer.style.left = `${x}px`;
   benfaceContainer.style.top = `${y}px`;
-  benfaceContainer.style.transform = "translate(-50%, -50%) scale(0.85)";
 
   // Calculate benface center position
   const benfaceRect = benfaceContainer.getBoundingClientRect();
