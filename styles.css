@@ -2,13 +2,13 @@
 :root {
   --header-height: 15vh;
   --nav-height: 100vh;
-  --transition-speed: 100ms;
+  --transition-speed: 200ms;
   --dev-color: #2c3e50;
-  --dev-hover-color: #34495e;
-  --music-color: #8e44ad;
-  --music-hover-color: #9b59b6;
-  --text-color: #ffffff;
-  --header-text-color: #2c3e50;
+  --dev-hover-color: #2f3f4f;
+  --music-color: #ad8a44;
+  --music-hover-color: rgb(199, 166, 96);
+  --text-color: #d1d1d1;
+  --header-text-color: #e1e1e1;
 }
 
 /* Reset and Base Styles */
@@ -37,18 +37,74 @@ body {
 header {
   height: var(--header-height);
   display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
   align-items: center;
   justify-content: center;
   background-color: #ffffff00;
-  position: absolue;
-  z-index: 10;
+  position: fixed;
+  z-index: 1000;
 }
 
 header h1 {
-  font-size: 3rem;
+  font-size: 8rem;
   font-weight: 700;
   color: var(--header-text-color);
   letter-spacing: 0.05em;
+  padding-top: 5rem;
+  text-shadow:
+    2px 2px rgba(0, 0, 0, 0.3),
+    4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* hide the container... show it on h1 hover */
+.benface-container {
+  position: fixed;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-8px); /* subtle motion on reveal */
+  transition:
+    opacity 200ms ease,
+    transform 200ms ease,
+    visibility 0s linear 200ms;
+  pointer-events: none;
+  margin: 0 auto;
+  top: 10rem;
+  left: 50%;
+  width: 15rem;
+  height: 15rem;
+  border: #000000 2px solid;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 2000;
+  box-shadow:
+    2px 2px 4px rgba(0, 0, 0, 0.3),
+    4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+header h1:hover {
+  text-shadow:
+    2px 2px rgba(0, 0, 0, 0.3),
+    4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+header h1:hover + .benface-container {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  transition-delay: 0s; /* show immediately */
+  pointer-events: auto;
+}
+
+img.benface {
+  position: absolute;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* preserves aspect ratio, fills box, crops excess */
+  object-position: center; /* adjust focal point if needed */
+  display: block;
 }
 
 /* Navigation Container */
@@ -56,6 +112,8 @@ header h1 {
   height: var(--nav-height);
   display: flex;
   position: relative;
+  overflow: visible;
+  transition: all 200ms ease-in-out;
 }
 
 /* Navigation Links */
@@ -68,51 +126,45 @@ header h1 {
   color: var(--text-color);
   font-size: 4rem;
   font-weight: 600;
-  transition: all var(--transition-speed) ease-in-out;
+  transition:
+    all var(--transition-speed) ease-in-out,
+    transform var(--transition-speed) ease-in-out;
   position: relative;
+  text-shadow:
+    2px 2px rgba(0, 0, 0, 0.3),
+    4px 4px 4px rgba(0, 0, 0, 0.3);
 }
 
 .nav-dev {
   background-color: var(--dev-color);
-  clip-path: polygon(
-    0 0,
-    100% 0,
-    95% 8%,
-    100% 16%,
-    95% 24%,
-    100% 32%,
-    95% 40%,
-    100% 48%,
-    95% 56%,
-    100% 64%,
-    95% 72%,
-    100% 80%,
-    95% 88%,
-    100% 96%,
-    100% 100%,
-    0 100%
-  );
+  border-right: #000000 1px solid;
 }
 
 .nav-music {
   background-color: var(--music-color);
+  border-left: #000000 1px solid;
 }
 
 /* Hover States */
 .nav-dev:hover {
   background-color: var(--dev-hover-color);
+  border-right: #000000 2px solid;
+  transform: scale(1.02);
 }
 
 .nav-music:hover {
   background-color: var(--music-hover-color);
+  border-left: #000000 2px solid;
+  transform: scale(1.02);
 }
 
-/* Wrapper for Dev section with canvas */
-.wrapper {
-  flex: 1;
-  position: relative;
-  display: flex;
-  height: 100%;
+.nav-link span {
+  /* display: inline-block; */
+  transition: all var(--transition-speed) ease-in-out;
+}
+.nav-link:hover span {
+  translate: 0px -10px;
+  letter-spacing: 0.1em;
 }
 
 .wrapper .nav-link {
