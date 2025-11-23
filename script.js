@@ -62,7 +62,7 @@ benfaceContainer.addEventListener("mousedown", (e) => {
   musicSpan.classList.add("drop-target");
 
   // Shrink benface on mousedown
-  benfaceContainer.style.transform = "translate(-50%, -50%) scale(0.85)";
+  benfaceContainer.style.transform = "translate(-50%, -50%) scale(0.93)";
 
   // Prevent default behavior to avoid text selection
   e.preventDefault();
@@ -72,18 +72,9 @@ benfaceContainer.addEventListener("mousedown", (e) => {
 document.addEventListener("mousemove", (e) => {
   if (!isDragging) return;
 
-  // Update benface position to follow cursor with offset
-  const x = e.clientX - offsetX;
-  const y = e.clientY - offsetY;
-
-  // Use absolute positioning with left/top properties
-  benfaceContainer.style.left = `${x}px`;
-  benfaceContainer.style.top = `${y}px`;
-
-  // Calculate benface center position
-  const benfaceRect = benfaceContainer.getBoundingClientRect();
-  const benfaceCenterX = benfaceRect.left + benfaceRect.width / 2;
-  const benfaceCenterY = benfaceRect.top + benfaceRect.height / 2;
+  // Calculate desired position based on cursor
+  let x = e.clientX - offsetX;
+  let y = e.clientY - offsetY;
 
   // Get drop-target circle positions and radii
   const devSpanRect = devSpan.getBoundingClientRect();
@@ -96,6 +87,37 @@ document.addEventListener("mousemove", (e) => {
   const musicCircleCenterX = musicSpanRect.left + musicSpanRect.width / 2;
   const musicCircleCenterY = musicSpanRect.top + musicSpanRect.height / 2;
   const musicCircleRadius = musicSpanRect.width / 2;
+
+  // Calculate distance to each circle center
+  const distanceToDev = Math.sqrt(
+    Math.pow(x - devCircleCenterX, 2) + Math.pow(y - devCircleCenterY, 2)
+  );
+  const distanceToMusic = Math.sqrt(
+    Math.pow(x - musicCircleCenterX, 2) + Math.pow(y - musicCircleCenterY, 2)
+  );
+
+  // Magnetic snap threshold (distance at which snap occurs)
+  const snapThreshold = 150;
+
+  // Apply magnetic snap if close enough to a circle
+  if (distanceToDev < snapThreshold && distanceToDev < distanceToMusic) {
+    // Snap to Dev circle center
+    x = devCircleCenterX;
+    y = devCircleCenterY;
+  } else if (distanceToMusic < snapThreshold) {
+    // Snap to Music circle center
+    x = musicCircleCenterX;
+    y = musicCircleCenterY;
+  }
+
+  // Use absolute positioning with left/top properties
+  benfaceContainer.style.left = `${x}px`;
+  benfaceContainer.style.top = `${y}px`;
+
+  // Calculate benface center position after positioning
+  const benfaceRect = benfaceContainer.getBoundingClientRect();
+  const benfaceCenterX = benfaceRect.left + benfaceRect.width / 2;
+  const benfaceCenterY = benfaceRect.top + benfaceRect.height / 2;
 
   // Check if benface center is inside either circular drop-target
   const isInDevCircle = isPointInCircle(

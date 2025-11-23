@@ -85,7 +85,7 @@ header h1 {
 
 /* Shrink benface when dragging */
 .benface-container.dragging {
-  transform: translate(-50%, -50%) scale(0.85);
+  transform: translate(-50%, -50%) scale(0.93);
 }
 
 header h1:hover {
@@ -183,8 +183,8 @@ img.benface {
 .nav-link span.drop-target {
   border: 3px solid rgba(255, 255, 255, 0.8);
   border-radius: 50%;
-  width: 16rem;
-  height: 16rem;
+  width: 14rem;
+  height: 14rem;
   display: flex;
   align-items: center;
   justify-content: center;
