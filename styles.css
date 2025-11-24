@@ -5,8 +5,8 @@
   --transition-speed: 200ms;
   --dev-color: #2c3e50;
   --dev-hover-color: #2f3f4f;
-  --music-color: #ad8a44;
-  --music-hover-color: rgb(199, 166, 96);
+  --music-color: #6b562b;
+  --music-hover-color: #876e3c;
   --text-color: #d1d1d1;
   --header-text-color: #e1e1e1;
 }
@@ -158,38 +158,45 @@ img.benface {
 
 .nav-link span {
   display: inline-block;
-  transition: all var(--transition-speed) ease-in-out;
+  /* transition: all var(--transition-speed) ease-in-out; */
 }
 
 .nav-link:hover span {
-  translate: 0px -10px;
+  /* translate: 0px -10px; */
   letter-spacing: 0.1em;
 }
 
-/* Pulsing animation for drop targets */
-@keyframes pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-    border-color: rgba(255, 255, 255, 0.8);
+/* Rotating dashed border animation for drop targets */
+@keyframes rotateBorder {
+  0% {
+    transform: rotate(0deg);
   }
-  50% {
-    box-shadow: 0 0 40px rgba(255, 255, 255, 0.8);
-    border-color: rgba(255, 255, 255, 1);
+  100% {
+    transform: rotate(360deg);
   }
 }
 
 /* Drop-target state for circular borders during drag */
 .nav-link span.drop-target {
-  border: 3px solid rgba(255, 255, 255, 0.8);
+  position: relative;
+  border: none;
   border-radius: 50%;
   width: 14rem;
   height: 14rem;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Rotating dashed border using pseudo-element */
+.nav-link span.drop-target::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 5px dashed rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  animation: rotateBorder 15s linear infinite;
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-  animation: pulse 1.5s ease-in-out infinite;
 }
 
 .wrapper .nav-link {

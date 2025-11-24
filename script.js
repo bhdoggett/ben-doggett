@@ -97,7 +97,7 @@ document.addEventListener("mousemove", (e) => {
   );
 
   // Magnetic snap threshold (distance at which snap occurs)
-  const snapThreshold = 150;
+  const snapThreshold = 50;
 
   // Apply magnetic snap if close enough to a circle
   if (distanceToDev < snapThreshold && distanceToDev < distanceToMusic) {
