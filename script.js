@@ -226,24 +226,18 @@ document.addEventListener("mouseup", () => {
   // Do nothing if dropped outside circular drop targets (position is maintained)
 });
 
-// Function to show "Drag my face!" message
+// Function to show "Drag my face!" message (curved text on benface)
 function showDragMessage() {
-  // Create message element if it doesn't exist
-  let message = document.querySelector(".drag-message");
-  if (!message) {
-    message = document.createElement("div");
-    message.className = "drag-message";
-    message.textContent = "Drag my face!";
-    document.body.appendChild(message);
+  const curvedText = document.querySelector(".curved-text");
+  if (curvedText) {
+    // Show the curved text
+    curvedText.classList.add("visible");
+
+    // Hide after 2 seconds
+    setTimeout(() => {
+      curvedText.classList.remove("visible");
+    }, 2000);
   }
-
-  // Show the message
-  message.classList.add("visible");
-
-  // Hide after 2 seconds
-  setTimeout(() => {
-    message.classList.remove("visible");
-  }, 2000);
 }
 
 // Prevent default click navigation and show message
@@ -260,3 +254,170 @@ navMusic.addEventListener("click", (e) => {
   showDragMessage();
 });
 // Ensure navigation only works via drag-and-drop
+
+// Touch event handlers for mobile drag support
+benfaceContainer.addEventListener("touchstart", (e) => {
+  isDragging = true;
+
+  const touch = e.touches[0];
+  const rect = benfaceContainer.getBoundingClientRect();
+  offsetX = touch.clientX - (rect.left + rect.width / 2);
+  offsetY = touch.clientY - (rect.top + rect.height / 2);
+
+  benfaceContainer.classList.add("dragging");
+  devSpan.classList.add("drop-target");
+  musicSpan.classList.add("drop-target");
+
+  benfaceContainer.style.transform = "translate(-50%, -50%) scale(0.93)";
+
+  e.preventDefault();
+});
+
+document.addEventListener("touchmove", (e) => {
+  if (!isDragging) return;
+
+  const touch = e.touches[0];
+  let x = touch.clientX - offsetX;
+  let y = touch.clientY - offsetY;
+
+  const devSpanRect = devSpan.getBoundingClientRect();
+  const musicSpanRect = musicSpan.getBoundingClientRect();
+
+  const devCircleCenterX = devSpanRect.left + devSpanRect.width / 2;
+  const devCircleCenterY = devSpanRect.top + devSpanRect.height / 2;
+  const devCircleRadius = devSpanRect.width / 2;
+
+  const musicCircleCenterX = musicSpanRect.left + musicSpanRect.width / 2;
+  const musicCircleCenterY = musicSpanRect.top + musicSpanRect.height / 2;
+  const musicCircleRadius = musicSpanRect.width / 2;
+
+  const distanceToDev = Math.sqrt(
+    Math.pow(x - devCircleCenterX, 2) + Math.pow(y - devCircleCenterY, 2)
+  );
+  const distanceToMusic = Math.sqrt(
+    Math.pow(x - musicCircleCenterX, 2) + Math.pow(y - musicCircleCenterY, 2)
+  );
+
+  const snapThreshold = 50;
+
+  if (distanceToDev < snapThreshold && distanceToDev < distanceToMusic) {
+    x = devCircleCenterX;
+    y = devCircleCenterY;
+  } else if (distanceToMusic < snapThreshold) {
+    x = musicCircleCenterX;
+    y = musicCircleCenterY;
+  }
+
+  benfaceContainer.style.left = `${x}px`;
+  benfaceContainer.style.top = `${y}px`;
+
+  const benfaceRect = benfaceContainer.getBoundingClientRect();
+  const benfaceCenterX = benfaceRect.left + benfaceRect.width / 2;
+  const benfaceCenterY = benfaceRect.top + benfaceRect.height / 2;
+
+  const isInDevCircle = isPointInCircle(
+    benfaceCenterX,
+    benfaceCenterY,
+    devCircleCenterX,
+    devCircleCenterY,
+    devCircleRadius
+  );
+
+  const isInMusicCircle = isPointInCircle(
+    benfaceCenterX,
+    benfaceCenterY,
+    musicCircleCenterX,
+    musicCircleCenterY,
+    musicCircleRadius
+  );
+
+  if (isInDevCircle) {
+    benfaceImg.src = benfaceImages.dev;
+  } else if (isInMusicCircle) {
+    benfaceImg.src = benfaceImages.music;
+  } else {
+    benfaceImg.src = benfaceImages.default;
+  }
+
+  e.preventDefault();
+});
+
+document.addEventListener("touchend", () => {
+  if (!isDragging) return;
+
+  const benfaceRect = benfaceContainer.getBoundingClientRect();
+  const benfaceCenterX = benfaceRect.left + benfaceRect.width / 2;
+  const benfaceCenterY = benfaceRect.top + benfaceRect.height / 2;
+
+  const devSpanRect = devSpan.getBoundingClientRect();
+  const musicSpanRect = musicSpan.getBoundingClientRect();
+
+  const devCircleCenterX = devSpanRect.left + devSpanRect.width / 2;
+  const devCircleCenterY = devSpanRect.top + devSpanRect.height / 2;
+  const devCircleRadius = devSpanRect.width / 2;
+
+  const musicCircleCenterX = musicSpanRect.left + musicSpanRect.width / 2;
+  const musicCircleCenterY = musicSpanRect.top + musicSpanRect.height / 2;
+  const musicCircleRadius = musicSpanRect.width / 2;
+
+  const isOverDev = isPointInCircle(
+    benfaceCenterX,
+    benfaceCenterY,
+    devCircleCenterX,
+    devCircleCenterY,
+    devCircleRadius
+  );
+
+  const isOverMusic = isPointInCircle(
+    benfaceCenterX,
+    benfaceCenterY,
+    musicCircleCenterX,
+    musicCircleCenterY,
+    musicCircleRadius
+  );
+
+  isDragging = false;
+
+  benfaceContainer.style.transform = "translate(-50%, -50%)";
+
+  if (!isOverDev && !isOverMusic) {
+    benfaceImg.src = benfaceImages.default;
+  }
+
+  benfaceContainer.classList.remove("dragging");
+  devSpan.classList.remove("drop-target");
+  musicSpan.classList.remove("drop-target");
+
+  if (isOverDev) {
+    window.location.href = navDev.href;
+  } else if (isOverMusic) {
+    window.location.href = navMusic.href;
+  }
+});
+
+// Handle window resize to recalculate benface position proportionally
+let previousWidth = window.innerWidth;
+let previousHeight = window.innerHeight;
+
+window.addEventListener("resize", () => {
+  const currentWidth = window.innerWidth;
+  const currentHeight = window.innerHeight;
+
+  // Get current position
+  const currentLeft =
+    parseFloat(benfaceContainer.style.left) || window.innerWidth / 2;
+  const currentTop =
+    parseFloat(benfaceContainer.style.top) || window.innerHeight / 2;
+
+  // Calculate proportional position
+  const proportionalLeft = (currentLeft / previousWidth) * currentWidth;
+  const proportionalTop = (currentTop / previousHeight) * currentHeight;
+
+  // Update position
+  benfaceContainer.style.left = `${proportionalLeft}px`;
+  benfaceContainer.style.top = `${proportionalTop}px`;
+
+  // Update previous dimensions
+  previousWidth = currentWidth;
+  previousHeight = currentHeight;
+});

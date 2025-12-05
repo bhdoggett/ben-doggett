@@ -16,11 +16,30 @@
     <header>
       <h1>Ben Doggett</h1>
       <div class="benface-container">
-        <img
-          src="/images/ben_boggett.jpg"
-          alt="Picture of Ben Doggett's face"
-          class="benface"
-        />
+        <svg
+          class="curved-text"
+          viewBox="0 0 240 240"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <path
+              id="circlePath"
+              d="M 120, 120 m -106, 0 a 106, 106 0 1,1 212,0"
+            />
+          </defs>
+          <text class="curved-text-path">
+            <textPath href="#circlePath" startOffset="50%" text-anchor="middle">
+              Drag my face!
+            </textPath>
+          </text>
+        </svg>
+        <div class="benface-image-wrapper">
+          <img
+            src="/images/ben_boggett.jpg"
+            alt="Picture of Ben Doggett's face"
+            class="benface"
+          />
+        </div>
       </div>
     </header>
 

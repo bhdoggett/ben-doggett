@@ -75,12 +75,64 @@ header h1 {
   height: 15rem;
   border: #000000 2px solid;
   border-radius: 50%;
-  overflow: hidden;
+  overflow: visible;
   z-index: 2000;
   box-shadow:
     2px 2px 4px rgba(0, 0, 0, 0.3),
     4px 4px 8px rgba(0, 0, 0, 0.3);
   cursor: grab;
+}
+
+/* Curved text SVG styling */
+.curved-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  animation: pulseGlow 1s infinite;
+}
+
+@keyframes pulseGlow {
+  0% {
+    filter: drop-shadow(0 0 0px #4da3ff);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px #4da3ff);
+  }
+  100% {
+    filter: drop-shadow(0 0 0px #4da3ff);
+  }
+}
+
+.curved-text.visible {
+  opacity: 1;
+}
+
+.curved-text-path {
+  fill: var(--header-text-color);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-shadow:
+    2px 2px rgba(0, 0, 0, 0.3),
+    4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Image wrapper to maintain circular clip */
+.benface-image-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 /* Shrink benface when dragging */
@@ -235,8 +287,14 @@ img.benface {
 
 /* Responsive Typography */
 @media (max-width: 768px) {
+  header {
+    position: absolute;
+    background-color: #000000;
+  }
+
   header h1 {
     font-size: 2rem;
+    padding-top: 0;
   }
 
   .nav-link {
@@ -245,5 +303,49 @@ img.benface {
 
   .drag-message {
     font-size: 3rem;
+  }
+
+  /* Stack navigation vertically on small screens */
+  .navigation-container {
+    flex-direction: column;
+    margin-top: var(--header-height);
+    height: calc(100vh - var(--header-height));
+  }
+
+  .nav-dev {
+    border-right: none;
+    border-bottom: #000000 1px solid;
+  }
+
+  .nav-music {
+    border-left: none;
+    border-top: #000000 1px solid;
+  }
+
+  .nav-dev:hover {
+    border-right: none;
+    border-bottom: #000000 2px solid;
+  }
+
+  .nav-music:hover {
+    border-left: none;
+    border-top: #000000 2px solid;
+  }
+
+  /* Recenter benface between nav links on small screens */
+  .benface-container {
+    top: calc(var(--header-height) + (100vh - var(--header-height)) / 2);
+    width: 10rem;
+    height: 10rem;
+  }
+
+  /* Smaller drop-target circles on small screens */
+  .nav-link span.drop-target {
+    width: 9rem;
+    height: 9rem;
+  }
+
+  .nav-link span.drop-target::before {
+    border-width: 3px;
   }
 }
