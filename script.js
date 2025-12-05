@@ -395,11 +395,23 @@ document.addEventListener("touchend", () => {
   }
 });
 
+// Set CSS custom property for actual viewport height (fixes mobile browser UI)
+function setViewportHeight() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty("--vh", `${vh}px`);
+}
+
+// Set on load and resize
+setViewportHeight();
+
 // Handle window resize to recalculate benface position proportionally
 let previousWidth = window.innerWidth;
 let previousHeight = window.innerHeight;
 
 window.addEventListener("resize", () => {
+  // Update viewport height for mobile
+  setViewportHeight();
+
   const currentWidth = window.innerWidth;
   const currentHeight = window.innerHeight;
 
